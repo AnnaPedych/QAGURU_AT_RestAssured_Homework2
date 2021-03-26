@@ -78,9 +78,9 @@ public class AddToWishList extends TestBase {
 
         JSONParser parser = new JSONParser();
         JSONObject JSONResponse = (JSONObject) parser.parse(response);
-        String wishListNumber = (String) JSONResponse.get("updatetopwishlistsectionhtml");
+        String wishListCount = (String) JSONResponse.get("updatetopwishlistsectionhtml");
 
         open("");
-        $("a[href='/wishlist'] .wishlist-qty").shouldHave(text((wishListNumber)));
+        $("a[href='/wishlist'] .wishlist-qty").shouldHave(text((wishListCount)));
     }
 }
