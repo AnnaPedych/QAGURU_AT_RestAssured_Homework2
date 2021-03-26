@@ -1,6 +1,9 @@
 package tests;
 
 import api.Auth;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Cookie;
 
@@ -14,7 +17,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 
-public class AddToWishList extends TestBase{
+public class AddToWishList extends TestBase {
 
     @Test
     void addToWishListAnonymousTest() {
@@ -42,5 +45,42 @@ public class AddToWishList extends TestBase{
 
         open("");
         $("a[href='/wishlist'] .wishlist-qty").shouldHave(text("(1)"));
+    }
+
+    @Test
+    void addToWishListLoggedInTest() throws ParseException {
+        Map<String, String> cookies = new Auth().getAuthorizedCookies("qaguru@qa.guru", "qaguru@qa.guru1");
+
+        open("http://demowebshop.tricentis.com/Themes/DefaultClean/Content/images/logo.png");
+        getWebDriver().manage().addCookie(new Cookie("Nop.customer", cookies.get("Nop.customer")));
+        getWebDriver().manage().addCookie(new Cookie("NOPCOMMERCE.AUTH", cookies.get("NOPCOMMERCE.AUTH")));
+        getWebDriver().manage().addCookie(new Cookie("ARRAffinity", cookies.get("ARRAffinity")));
+
+        open("");
+        $(".account").shouldHave(text("qaguru@qa.guru"));
+
+        String initialWishListValue = new TestBase().getInitialWishlistCount();
+        Integer initialWishListCount = Integer.parseInt(initialWishListValue.substring(1, initialWishListValue.length() - 1));
+
+        String response =
+                given()
+                        .contentType("application/x-www-form-urlencoded; charset=UTF-8")
+                        .cookies(cookies)
+                        .body("product_attribute_34_7_12=32&addtocart_34.EnteredQuantity=1")
+                .when()
+                        .post("/addproducttocart/details/34/2")
+                .then()
+                        .statusCode(200)
+                        .log().body()
+                        .body("success", is(true))
+                        .body("updatetopwishlistsectionhtml", is(("(" + (initialWishListCount + 1) + ")")))
+                        .extract().response().asString();
+
+        JSONParser parser = new JSONParser();
+        JSONObject JSONResponse = (JSONObject) parser.parse(response);
+        String wishListNumber = (String) JSONResponse.get("updatetopwishlistsectionhtml");
+
+        open("");
+        $("a[href='/wishlist'] .wishlist-qty").shouldHave(text((wishListNumber)));
     }
 }
