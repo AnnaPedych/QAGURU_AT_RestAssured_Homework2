@@ -4,7 +4,10 @@ import api.Auth;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.Cookie;
 
 import java.util.Map;
@@ -17,9 +20,11 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class AddToWishList extends TestBase {
 
     @Test
+    @Order(1)
     void addToWishListAnonymousTest() {
         Map<String, String> cookies = new Auth().getAnonymousCookies();
 
@@ -48,6 +53,7 @@ public class AddToWishList extends TestBase {
     }
 
     @Test
+    @Order(2)
     void addToWishListLoggedInTest() throws ParseException {
         Map<String, String> cookies = new Auth().getAuthorizedCookies("qaguru@qa.guru", "qaguru@qa.guru1");
 
