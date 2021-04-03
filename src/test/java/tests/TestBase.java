@@ -17,7 +17,6 @@ public class TestBase {
 
     public String getInitialWishlistCount() {
         open("");
-        return
-                $("a[href='/wishlist'] .wishlist-qty").getText();
+        return $("a[href='/wishlist'] .wishlist-qty").getText();
     }
 }
