@@ -19,6 +19,7 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static templates.ReportTemplate.filters;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class AddToWishList extends TestBase {
@@ -39,6 +40,7 @@ public class AddToWishList extends TestBase {
                 .contentType("application/x-www-form-urlencoded; charset=UTF-8")
                 .cookies(cookies)
                 .body("product_attribute_34_7_12=32&addtocart_34.EnteredQuantity=1")
+                .filter(filters().customTemplates())
         .when()
                 .post("/addproducttocart/details/34/2")
         .then()
@@ -73,6 +75,7 @@ public class AddToWishList extends TestBase {
                         .contentType("application/x-www-form-urlencoded; charset=UTF-8")
                         .cookies(cookies)
                         .body("product_attribute_34_7_12=32&addtocart_34.EnteredQuantity=1")
+                        .filter(filters().customTemplates())
                 .when()
                         .post("/addproducttocart/details/34/2")
                 .then()
