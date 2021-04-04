@@ -22,7 +22,6 @@ public class TestBase {
         RestAssured.baseURI = "http://demowebshop.tricentis.com";
         Configuration.baseUrl = "http://demowebshop.tricentis.com";
         configureDriver();
-        RestAssured.filters(Collections.singletonList(new AllureRestAssured()));
     }
 
     public String getInitialWishlistCount() {
