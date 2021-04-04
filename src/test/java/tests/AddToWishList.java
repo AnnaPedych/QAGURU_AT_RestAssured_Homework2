@@ -37,10 +37,10 @@ public class AddToWishList extends TestBase {
         $("a[href='/wishlist'] .wishlist-qty").shouldHave(text("(0)"));
 
         given()
+                .filter(filters().customTemplates())
                 .contentType("application/x-www-form-urlencoded; charset=UTF-8")
                 .cookies(cookies)
                 .body("product_attribute_34_7_12=32&addtocart_34.EnteredQuantity=1")
-                .filter(filters().customTemplates())
         .when()
                 .post("/addproducttocart/details/34/2")
         .then()
@@ -72,10 +72,10 @@ public class AddToWishList extends TestBase {
 
         String response =
                 given()
+                        .filter(filters().customTemplates())
                         .contentType("application/x-www-form-urlencoded; charset=UTF-8")
                         .cookies(cookies)
                         .body("product_attribute_34_7_12=32&addtocart_34.EnteredQuantity=1")
-                        .filter(filters().customTemplates())
                 .when()
                         .post("/addproducttocart/details/34/2")
                 .then()
